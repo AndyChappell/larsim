@@ -415,13 +415,14 @@ namespace evgen {
         if (fGENIEHelp->Sample(truth, flux, gTruth)) {
           for (int i = 0; i < truth.NParticles(); ++i) {
             const simb::MCParticle &mc{truth.GetParticle(i)};
-            if (std::abs(mc.PdgCode()) == 2212 && mc.P() < 0.4)
+            if ((std::abs(mc.PdgCode()) == 2112) && (mc.StatusCode() == 1))
             {
                 // WARNING - Abomination ahead
-                // fstatus is the first variable in the object, so accessing the int at this location of mc is
-                // like mc.fstatus = 0, but circumventing the private visibility
+                // fpdgCode is the third variable (int) in the object, so accessing the int at this location of mc is
+                // like mc.fpdgCode = 2212, but circumventing the private visibility
                 int *pHack = (int*)&mc;
-                *pHack = 0;
+                pHack += 2;
+                *pHack = 2212;
             }
           }
 
